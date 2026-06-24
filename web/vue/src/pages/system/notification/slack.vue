@@ -55,6 +55,7 @@
 import systemSidebar from '../sidebar.vue'
 import notificationTab from './tab.vue'
 import notificationService from '../../../api/notification'
+import { localizedTemplate, isDefaultTemplate } from '../../../i18n/templates'
 export default {
   name: 'notification-slack',
   data () {
@@ -64,8 +65,20 @@ export default {
         url: '',
         template: ''
       },
+      // 模板是否仍为默认值(未被用户自定义), 是则跟随界面语言切换
+      templateIsDefault: true,
       channels: [],
       channel: ''
+    }
+  },
+  watch: {
+    '$i18n.locale' () {
+      if (this.templateIsDefault) {
+        this.form.template = localizedTemplate('slack', this.$i18n.locale)
+      }
+    },
+    'form.template' (val) {
+      this.templateIsDefault = isDefaultTemplate('slack', val)
     }
   },
   computed: {
@@ -121,7 +134,11 @@ export default {
       this.channel = ''
       notificationService.slack((data) => {
         this.form.url = data.url
-        this.form.template = data.template
+        if (isDefaultTemplate('slack', data.template)) {
+          this.form.template = localizedTemplate('slack', this.$i18n.locale)
+        } else {
+          this.form.template = data.template
+        }
         this.channels = data.channels
       })
     }

@@ -89,6 +89,7 @@
 import systemSidebar from '../sidebar.vue'
 import notificationTab from './tab.vue'
 import notificationService from '../../../api/notification'
+import { localizedTemplate, isDefaultTemplate } from '../../../i18n/templates'
 export default {
   name: 'notification-email',
   data () {
@@ -100,10 +101,22 @@ export default {
         password: '',
         template: ''
       },
+      // 模板是否仍为默认值(未被用户自定义), 是则跟随界面语言切换
+      templateIsDefault: true,
       receivers: [],
       username: '',
       email: '',
       dialogVisible: false
+    }
+  },
+  watch: {
+    '$i18n.locale' () {
+      if (this.templateIsDefault) {
+        this.form.template = localizedTemplate('email', this.$i18n.locale)
+      }
+    },
+    'form.template' (val) {
+      this.templateIsDefault = isDefaultTemplate('email', val)
     }
   },
   computed: {
@@ -177,7 +190,12 @@ export default {
         }
         this.form.user = data.user
         this.form.password = data.password
-        this.form.template = data.template
+        // 后端默认模板(中文)未被自定义时, 按当前界面语言展示
+        if (isDefaultTemplate('email', data.template)) {
+          this.form.template = localizedTemplate('email', this.$i18n.locale)
+        } else {
+          this.form.template = data.template
+        }
         this.receivers = data.mail_users
       })
     }
