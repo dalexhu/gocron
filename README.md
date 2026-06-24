@@ -14,6 +14,12 @@
 
 ## 迭代
 
+### v2.0
+
+* 前端由 **Vue 2 + Element-UI + webpack** 升级到 **Vue 3 + Vite + Element Plus**
+* 静态资源由 `rakyll/statik` 改为 Go 原生 `//go:embed` 嵌入二进制(要求 Go 1.21+)
+* 新增**中英文界面切换**(基于 vue-i18n),语言选择本地持久化,切换即时生效无需刷新
+
 ### v1.6.4
 
 * 新增 `gocron-cli`，支持通过浏览器授权后管理 cron 任务
@@ -57,6 +63,8 @@
 ## 功能特性
 
 - Web界面管理定时任务
+
+- 中英文界面切换(简体中文 / English)
 
 - crontab时间表达式, 精确到秒
 
@@ -109,6 +117,23 @@ gocron-cli --json task list
 ```
 
 CLI 凭据保存在本机用户目录下的 `.gocron/config.json`。服务端仅保存 refresh token hash，超级管理员可在 Web 后台的 `Agent授权` 页面撤销设备授权。
+
+## 前端开发
+
+前端源码位于 `web/vue`(Vue 3 + Vite + Element Plus + vue-i18n)。
+
+```bash
+# 安装依赖
+make install-vue        # 等价于 cd web/vue && npm install
+
+# 本地开发, 热更新于 localhost:8080, /api 代理到本地 gocron(默认 5920)
+make run-vue            # 等价于 cd web/vue && npm run dev
+
+# 生产构建, 产物拷贝到 web/public, 由 //go:embed 嵌入 gocron 二进制
+make build-vue
+```
+
+新增/修改文案时, 在 `web/vue/src/i18n/locales/` 下对应模块同步维护 `zh-CN` 与 `en` 两套 key。
 
 #### 了解更多
 
