@@ -25,8 +25,14 @@ export default {
     this.activeName = segments[3]
   },
   methods: {
-    changeTab (item) {
-      this.$router.push(`/system/notification/${item.name}`)
+    // 仅在用户点击标签时触发 (不会因 v-model 程序化变更而误触发, 避免路由循环)。
+    // Element Plus 的 @tab-click 回传 TabsPaneContext, 名称在 paneName 上 (Element-UI 时代是 item.name)。
+    changeTab (pane) {
+      const name = pane && (pane.paneName || (pane.props && pane.props.name))
+      if (!name || name === this.$route.path.split('/')[3]) {
+        return
+      }
+      this.$router.push(`/system/notification/${name}`)
     }
   }
 }
