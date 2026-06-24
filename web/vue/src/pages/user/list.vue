@@ -3,13 +3,13 @@
     <user-sidebar></user-sidebar>
     <el-main>
       <el-breadcrumb separator-class="el-icon-arrow-right" style="margin-bottom:20px">
-          <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-          <el-breadcrumb-item :to="{ path: '/user' }">用户管理</el-breadcrumb-item>
-          <el-breadcrumb-item>用户列表</el-breadcrumb-item>
+          <el-breadcrumb-item :to="{ path: '/' }">{{ $t('user.list.breadcrumbHome') }}</el-breadcrumb-item>
+          <el-breadcrumb-item :to="{ path: '/user' }">{{ $t('user.list.breadcrumbUser') }}</el-breadcrumb-item>
+          <el-breadcrumb-item>{{ $t('user.list.breadcrumbList') }}</el-breadcrumb-item>
       </el-breadcrumb>
       <el-row type="flex" justify="end">
-        <el-button type="primary" icon="el-icon-edit" @click="toEdit(null)" v-if="this.$store.getters.user.isSuperAdmin">新增</el-button>
-        <el-button type="info" icon="el-icon-refresh" @click="refresh">刷新</el-button>
+        <el-button type="primary" @click="toEdit(null)" v-if="this.$store.getters.user.isSuperAdmin"><el-icon><Edit/></el-icon>{{ $t('user.list.addBtn') }}</el-button>
+        <el-button type="info" @click="refresh"><el-icon><Refresh/></el-icon>{{ $t('user.list.refreshBtn') }}</el-button>
       </el-row>
 
       <el-table
@@ -19,25 +19,25 @@
         style="width: 100%; margin: 20px 0;">
         <el-table-column
           prop="id"
-          label="用户id"
+          :label="$t('user.list.idLabel')"
           width="100">
         </el-table-column>
         <el-table-column
           prop="name"
-          label="用户名">
+          :label="$t('user.list.nameLabel')">
         </el-table-column>
         <el-table-column
           prop="email"
-          label="邮箱">
+          :label="$t('user.list.emailLabel')">
         </el-table-column>
         <el-table-column
           prop="is_admin"
           :formatter="formatRole"
-          label="角色">
+          :label="$t('user.list.roleLabel')">
         </el-table-column>
         <el-table-column
-          label="状态">
-          <template slot-scope="scope">
+          :label="$t('user.list.statusLabel')">
+          <template #default="scope">
             <el-switch
               v-model="scope.row.status"
               :active-value="1"
@@ -51,14 +51,14 @@
         <el-table-column
           align="center"
           header-align="left"
-          label="操作"
+          :label="$t('user.list.operationLabel')"
           width="250"
           v-if="this.isSuperAdmin">
-          <template slot-scope="scope">
+          <template #default="scope">
             <el-row>
-              <el-button size="small" type="primary" @click="toEdit(scope.row)">编辑</el-button>
-              <el-button size="small" type="success" @click="editPassword(scope.row)">修改密码</el-button>
-              <el-button size="small" type="danger" @click="remove(scope.row)">删除</el-button>
+              <el-button size="small" type="primary" @click="toEdit(scope.row)">{{ $t('user.list.editBtn') }}</el-button>
+              <el-button size="small" type="success" @click="editPassword(scope.row)">{{ $t('user.list.editPasswordBtn') }}</el-button>
+              <el-button size="small" type="danger" @click="remove(scope.row)">{{ $t('user.list.deleteBtn') }}</el-button>
             </el-row>
           </template>
         </el-table-column>
@@ -81,7 +81,7 @@
 </template>
 
 <script>
-import userSidebar from './sidebar'
+import userSidebar from './sidebar.vue'
 import userService from '../../api/user'
 export default {
   name: 'user-list',
@@ -110,11 +110,11 @@ export default {
     },
     formatRole (row, col) {
       if (row[col.property] === 2) {
-        return '超级管理员'
+        return this.$t('user.list.roleSuperAdmin')
       } else if (row[col.property] === 1) {
-        return '管理员'
+        return this.$t('user.list.roleAdmin')
       } else {
-        return '普通用户'
+        return this.$t('user.list.roleNormal')
       }
     },
     changePage (page) {
@@ -152,7 +152,7 @@ export default {
     },
     refresh () {
       this.search(() => {
-        this.$message.success('刷新成功')
+        this.$message.success(this.$t('user.list.refreshSuccess'))
       })
     },
     editPassword (item) {

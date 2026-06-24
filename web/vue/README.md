@@ -1,21 +1,21 @@
 # gocron
 
-> 定时任务管理系统
+> 定时任务管理系统 — 前端 (Vue 3 + Vite + Element Plus)
 
 ## Build Setup
 
 ``` bash
-# install dependencies
-yarn install
+# 安装依赖
+npm install
 
-# serve with hot reload at localhost:8080
-yarn run dev
+# 本地开发, 热更新于 localhost:8080, /api 代理到本地 gocron (默认 5920)
+npm run dev
 
-# build for production with minification
-yarn run build
+# 生产构建 (产物输出到 dist/, 由 make build-vue 拷贝到 ../public/, 经 //go:embed 嵌入 gocron 二进制)
+npm run build
 
-# build for production and view the bundle analyzer report
-yarn run build --report
+# 预览生产构建
+npm run preview
 ```
 
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+构建流程详见仓库根目录 `makefile` 的 `build-vue` 目标,以及 `web/embed.go`。

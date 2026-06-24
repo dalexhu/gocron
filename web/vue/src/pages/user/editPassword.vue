@@ -3,22 +3,22 @@
     <user-sidebar></user-sidebar>
     <el-main>
       <el-breadcrumb separator-class="el-icon-arrow-right" style="margin-bottom:20px">
-          <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-          <el-breadcrumb-item :to="{ path: '/user' }">用户管理</el-breadcrumb-item>
-          <el-breadcrumb-item>修改密码</el-breadcrumb-item>
+          <el-breadcrumb-item :to="{ path: '/' }">{{ $t('user.editPassword.breadcrumbHome') }}</el-breadcrumb-item>
+          <el-breadcrumb-item :to="{ path: '/user' }">{{ $t('user.editPassword.breadcrumbUser') }}</el-breadcrumb-item>
+          <el-breadcrumb-item>{{ $t('user.editPassword.breadcrumbEditPassword') }}</el-breadcrumb-item>
       </el-breadcrumb>
       <el-form ref="form" class="page-form" :model="form" :rules="formRules" label-width="100px">
         <el-row>
           <el-col :span="8">
-            <el-form-item label="新密码" prop="new_password">
+            <el-form-item :label="$t('user.editPassword.newPasswordLabel')" prop="new_password">
               <el-input v-model="form.new_password" type="password"></el-input>
             </el-form-item>
-            <el-form-item label="确认新密码" prop="confirm_new_password">
+            <el-form-item :label="$t('user.editPassword.confirmNewPasswordLabel')" prop="confirm_new_password">
               <el-input v-model="form.confirm_new_password" type="password"></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="submit()">保存</el-button>
-              <el-button @click="cancel">取消</el-button>
+              <el-button type="primary" @click="submit()">{{ $t('user.editPassword.saveBtn') }}</el-button>
+              <el-button @click="cancel">{{ $t('user.editPassword.cancelBtn') }}</el-button>
             </el-form-item>
           </el-col>
         </el-row>
@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import userSidebar from './sidebar'
+import userSidebar from './sidebar.vue'
 import userService from '../../api/user'
 export default {
   name: 'user-edit-password',
@@ -38,13 +38,17 @@ export default {
         id: '',
         new_password: '',
         confirm_new_password: ''
-      },
-      formRules: {
+      }
+    }
+  },
+  computed: {
+    formRules () {
+      return {
         new_password: [
-          {required: true, message: '请输入新密码', trigger: 'blur'}
+          {required: true, message: this.$t('user.editPassword.newPasswordRequired'), trigger: 'blur'}
         ],
         confirm_new_password: [
-          {required: true, message: '请再次输入新密码', trigger: 'blur'}
+          {required: true, message: this.$t('user.editPassword.confirmNewPasswordRequired'), trigger: 'blur'}
         ]
       }
     }

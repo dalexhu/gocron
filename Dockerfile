@@ -1,19 +1,18 @@
-FROM golang:1.15-alpine as builder
+FROM golang:1.24-alpine as builder
 
 RUN apk update \
-    && apk add --no-cache git ca-certificates make bash yarn nodejs
+    && apk add --no-cache git ca-certificates make bash npm nodejs
 
 RUN go env -w GO111MODULE=on && \
     go env -w GOPROXY=https://goproxy.cn,direct
 
 WORKDIR /app
 
-RUN git clone https://github.com/ouqiang/gocron.git \
+# 前端构建产物通过 //go:embed 嵌入 gocron 二进制 (见 web/embed.go), 无需再执行 statik。
+RUN git clone https://github.com/dalexhu/gocron.git \
     && cd gocron \
-    && yarn config set ignore-engines true \
     && make install-vue \
     && make build-vue \
-    && make statik \
     && CGO_ENABLED=0 make gocron
 
 FROM alpine:3.12

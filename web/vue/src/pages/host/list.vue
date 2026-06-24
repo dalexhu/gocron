@@ -3,27 +3,27 @@
     <host-sidebar></host-sidebar>
     <el-main>
       <el-breadcrumb separator-class="el-icon-arrow-right" style="margin-bottom:20px">
-        <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-        <el-breadcrumb-item :to="{ path: '/host' }">任务节点</el-breadcrumb-item>
-        <el-breadcrumb-item>节点列表</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '/' }">{{ $t('host.list.breadcrumbHome') }}</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '/host' }">{{ $t('host.list.breadcrumbHost') }}</el-breadcrumb-item>
+        <el-breadcrumb-item>{{ $t('host.list.breadcrumbList') }}</el-breadcrumb-item>
       </el-breadcrumb>
       <el-form :inline="true" >
         <el-row>
           <el-form-item label="">
-            <el-input placeholder="请输入节点ID" v-model.trim="searchParams.id"></el-input>
+            <el-input :placeholder="$t('host.list.idPlaceholder')" v-model.trim="searchParams.id"></el-input>
           </el-form-item>
           <el-form-item label="">
-            <el-input placeholder="请输入主机名" v-model.trim="searchParams.name"></el-input>
+            <el-input :placeholder="$t('host.list.namePlaceholder')" v-model.trim="searchParams.name"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="search()">搜索</el-button>
+            <el-button type="primary" @click="search()">{{ $t('host.list.searchBtn') }}</el-button>
           </el-form-item>
         </el-row>
       </el-form>
 
       <el-row type="flex" justify="end">
-        <el-button type="primary" icon="el-icon-edit" @click="toEdit(null)" v-if="this.$store.getters.user.isAdmin">新增</el-button>
-        <el-button type="info" icon="el-icon-refresh" @click="refresh">刷新</el-button>
+        <el-button type="primary" @click="toEdit(null)" v-if="this.$store.getters.user.isAdmin"><el-icon><Edit/></el-icon>{{ $t('host.list.createBtn') }}</el-button>
+        <el-button type="info" @click="refresh"><el-icon><Refresh/></el-icon>{{ $t('host.list.refreshBtn') }}</el-button>
       </el-row>
 
       <el-table
@@ -33,39 +33,39 @@
         style="width: 100%; margin: 20px 0;">
         <el-table-column
           prop="id"
-          label="节点ID">
+          :label="$t('host.list.idLabel')">
         </el-table-column>
         <el-table-column
           prop="alias"
-          label="节点名">
+          :label="$t('host.list.aliasLabel')">
         </el-table-column>
         <el-table-column
           prop="name"
-          label="主机名">
+          :label="$t('host.list.nameLabel')">
         </el-table-column>
         <el-table-column
           prop="port"
-          label="端口">
+          :label="$t('host.list.portLabel')">
         </el-table-column>
         <el-table-column
           prop="remark"
-          label="备注">
+          :label="$t('host.list.remarkLabel')">
         </el-table-column>
         <el-table-column
           align="center"
           header-align="left"
-          label="操作"
+          :label="$t('host.list.operationLabel')"
           width="180"
           v-if="this.isAdmin">
-          <template slot-scope="scope">
+          <template #default="scope">
             <el-row>
-              <el-button size="small" type="primary" @click="toEdit(scope.row)">编辑</el-button>
-              <el-button size="small" type="success" @click="toTasks(scope.row)">查看任务</el-button>
+              <el-button size="small" type="primary" @click="toEdit(scope.row)">{{ $t('host.list.editBtn') }}</el-button>
+              <el-button size="small" type="success" @click="toTasks(scope.row)">{{ $t('host.list.viewTasksBtn') }}</el-button>
             </el-row>
             <br>
             <el-row>
-              <el-button size="small" type="danger" @click="remove(scope.row)">删除</el-button>
-              <el-button size="small" type="info" @click="ping(scope.row)">测试连接</el-button>
+              <el-button size="small" type="danger" @click="remove(scope.row)">{{ $t('host.list.deleteBtn') }}</el-button>
+              <el-button size="small" type="info" @click="ping(scope.row)">{{ $t('host.list.pingBtn') }}</el-button>
             </el-row>
           </template>
         </el-table-column>
@@ -88,7 +88,7 @@
 </template>
 
 <script>
-import hostSidebar from './sidebar'
+import hostSidebar from './sidebar.vue'
 import hostService from '../../api/host'
 export default {
   name: 'host-list',
@@ -135,7 +135,7 @@ export default {
     },
     ping (item) {
       hostService.ping(item.id, () => {
-        this.$message.success('连接成功')
+        this.$message.success(this.$t('host.list.pingSuccess'))
       })
     },
     toEdit (item) {
@@ -149,7 +149,7 @@ export default {
     },
     refresh () {
       this.search(() => {
-        this.$message.success('刷新成功')
+        this.$message.success(this.$t('host.list.refreshSuccess'))
       })
     },
     toTasks (item) {

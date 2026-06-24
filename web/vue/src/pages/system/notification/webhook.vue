@@ -3,25 +3,25 @@
     <system-sidebar></system-sidebar>
     <el-main>
       <el-breadcrumb separator-class="el-icon-arrow-right" style="margin-bottom:20px">
-        <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-        <el-breadcrumb-item :to="{ path: '/system' }">系统管理</el-breadcrumb-item>
-        <el-breadcrumb-item>通知配置</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '/' }">{{ $t('system.webhook.home') }}</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '/system' }">{{ $t('system.webhook.systemManage') }}</el-breadcrumb-item>
+        <el-breadcrumb-item>{{ $t('system.webhook.notificationConfig') }}</el-breadcrumb-item>
       </el-breadcrumb>
       <notification-tab></notification-tab>
       <el-form ref="form" :model="form" :rules="formRules" label-width="100px" style="width: 700px;">
-        <el-form-item label="URL" prop="url">
-          <span slot="label">
-            URL
+        <el-form-item :label="$t('system.webhook.url')" prop="url">
+          <template #label>
+            {{ $t('system.webhook.url') }}
             <el-tooltip placement="top-start">
-              <div slot="content">
-                通知内容推送到指定URL, POST请求, 设置Header [Content-Type: application/json]
-              </div>
-              <i class="el-icon-question"></i>
+              <template #content>
+                {{ $t('system.webhook.urlTooltip') }}
+              </template>
+              <el-icon><QuestionFilled/></el-icon>
             </el-tooltip>
-          </span>
+          </template>
           <el-input v-model.trim="form.url"></el-input>
         </el-form-item>
-        <el-form-item label="模板" prop="template">
+        <el-form-item :label="$t('system.webhook.template')" prop="template">
           <el-input
             type="textarea"
             :rows="8"
@@ -30,7 +30,7 @@
           </el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="submit()">保存</el-button>
+          <el-button type="primary" @click="submit()">{{ $t('system.webhook.save') }}</el-button>
         </el-form-item>
       </el-form>
     </el-main>
@@ -38,8 +38,8 @@
 </template>
 
 <script>
-import systemSidebar from '../sidebar'
-import notificationTab from './tab'
+import systemSidebar from '../sidebar.vue'
+import notificationTab from './tab.vue'
 import notificationService from '../../../api/notification'
 export default {
   name: 'notification-webhook',
@@ -48,13 +48,17 @@ export default {
       form: {
         url: '',
         template: ''
-      },
-      formRules: {
+      }
+    }
+  },
+  computed: {
+    formRules () {
+      return {
         url: [
-          {type: 'url', required: true, message: '请输入有效的通知URL', trigger: 'blur'}
+          {type: 'url', required: true, message: this.$t('system.webhook.urlRequired'), trigger: 'blur'}
         ],
         template: [
-          {required: true, message: '请输入通知模板', trigger: 'blur'}
+          {required: true, message: this.$t('system.webhook.templateRequired'), trigger: 'blur'}
         ]
       }
     }
@@ -74,7 +78,7 @@ export default {
     },
     save () {
       notificationService.updateWebHook(this.form, () => {
-        this.$message.success('更新成功')
+        this.$message.success(this.$t('system.webhook.updateSuccess'))
         this.init()
       })
     },

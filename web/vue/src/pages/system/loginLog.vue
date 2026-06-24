@@ -3,9 +3,9 @@
     <system-sidebar></system-sidebar>
     <el-main>
       <el-breadcrumb separator-class="el-icon-arrow-right" style="margin-bottom:20px">
-          <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-          <el-breadcrumb-item :to="{ path: '/system' }">系统管理</el-breadcrumb-item>
-          <el-breadcrumb-item>登录日志</el-breadcrumb-item>
+          <el-breadcrumb-item :to="{ path: '/' }">{{ $t('system.loginLog.home') }}</el-breadcrumb-item>
+          <el-breadcrumb-item :to="{ path: '/system' }">{{ $t('system.loginLog.systemManage') }}</el-breadcrumb-item>
+          <el-breadcrumb-item>{{ $t('system.loginLog.loginLog') }}</el-breadcrumb-item>
       </el-breadcrumb>
       <el-table
         :data="logs"
@@ -14,21 +14,21 @@
         style="width: 100%; margin-bottom: 20px;">
         <el-table-column
           prop="id"
-          label="ID">
+          :label="$t('system.loginLog.id')">
         </el-table-column>
         <el-table-column
           prop="username"
-          label="用户名">
+          :label="$t('system.loginLog.username')">
         </el-table-column>
         <el-table-column
           prop="ip"
-          label="登录IP">
+          :label="$t('system.loginLog.loginIp')">
         </el-table-column>
         <el-table-column
-          label="登录时间"
+          :label="$t('system.loginLog.loginTime')"
           width="">
-          <template slot-scope="scope">
-            {{scope.row.created | formatTime}}
+          <template #default="scope">
+            {{$formatTime(scope.row.created)}}
           </template>
         </el-table-column>
       </el-table>
@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import systemSidebar from './sidebar'
+import systemSidebar from './sidebar.vue'
 import systemService from '../../api/system'
 export default {
   name: 'login-log',

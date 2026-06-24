@@ -1,20 +1,11 @@
 <template>
   <div>
     <el-tabs v-model="activeName" @tab-click="changeTab">
-      <el-tab-pane label="邮件" name="email"></el-tab-pane>
-      <el-tab-pane label="Slack" name="slack"></el-tab-pane>
-      <el-tab-pane label="Webhook" name="webhook"></el-tab-pane>
+      <el-tab-pane :label="$t('system.tab.email')" name="email"></el-tab-pane>
+      <el-tab-pane :label="$t('system.tab.slack')" name="slack"></el-tab-pane>
+      <el-tab-pane :label="$t('system.tab.webhook')" name="webhook"></el-tab-pane>
     </el-tabs>
-    <pre>
-      <code style="color:darkgray">
-      通知模板支持的变量：
-
-        TaskId   任务ID
-        TaskName 任务名称
-        Status   任务执行结果状态
-        Result   任务执行输出
-      </code>
-    </pre>
+    <pre><code style="color:darkgray">{{ $t('system.tab.templateVars') }}</code></pre>
   </div>
 </template>
 
@@ -34,8 +25,14 @@ export default {
     this.activeName = segments[3]
   },
   methods: {
-    changeTab (item) {
-      this.$router.push(`/system/notification/${item.name}`)
+    // 仅在用户点击标签时触发 (不会因 v-model 程序化变更而误触发, 避免路由循环)。
+    // Element Plus 的 @tab-click 回传 TabsPaneContext, 名称在 paneName 上 (Element-UI 时代是 item.name)。
+    changeTab (pane) {
+      const name = pane && (pane.paneName || (pane.props && pane.props.name))
+      if (!name || name === this.$route.path.split('/')[3]) {
+        return
+      }
+      this.$router.push(`/system/notification/${name}`)
     }
   }
 }

@@ -3,48 +3,48 @@
     <system-sidebar></system-sidebar>
     <el-main>
       <el-breadcrumb separator-class="el-icon-arrow-right" style="margin-bottom:20px">
-        <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-        <el-breadcrumb-item :to="{ path: '/system' }">系统管理</el-breadcrumb-item>
-        <el-breadcrumb-item>通知配置</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '/' }">{{ $t('system.email.home') }}</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '/system' }">{{ $t('system.email.systemManage') }}</el-breadcrumb-item>
+        <el-breadcrumb-item>{{ $t('system.email.notificationConfig') }}</el-breadcrumb-item>
       </el-breadcrumb>
       <notification-tab></notification-tab>
       <el-form ref="form" :model="form" :rules="formRules" label-width="150px" style="width: 800px;">
-        <h3>邮件服务器配置</h3>
+        <h3>{{ $t('system.email.serverConfigTitle') }}</h3>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="SMTP服务器" prop="host">
+            <el-form-item :label="$t('system.email.smtpHost')" prop="host">
               <el-input v-model="form.host"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="端口" prop="port">
+            <el-form-item :label="$t('system.email.port')" prop="port">
               <el-input v-model.number="form.port"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="用户名" prop="user">
+            <el-form-item :label="$t('system.email.username')" prop="user">
               <el-input v-model="form.user"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="密码" prop="password">
+            <el-form-item :label="$t('system.email.password')" prop="password">
               <el-input v-model="form.password" type="password"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
 
-        <el-form-item label="模板" prop="template">
-          <span slot="label">
-            模板
+        <el-form-item :label="$t('system.email.template')" prop="template">
+          <template #label>
+            {{ $t('system.email.template') }}
             <el-tooltip placement="top">
-              <div slot="content">
-                通知模板支持html
-              </div>
-              <i class="el-icon-question"></i>
+              <template #content>
+                {{ $t('system.email.templateTooltip') }}
+              </template>
+              <el-icon><QuestionFilled/></el-icon>
             </el-tooltip>
-          </span>
+          </template>
           <el-input
             type="textarea"
             :rows="6"
@@ -53,10 +53,10 @@
           </el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="submit()">保存</el-button>
+          <el-button type="primary" @click="submit()">{{ $t('system.email.save') }}</el-button>
         </el-form-item>
         <br>
-        <h3>通知用户 &nbsp;&nbsp;&nbsp;<el-button type="primary" size="mini" icon="el-icon-plus" plain @click="createUser"></el-button></h3>
+        <h3>{{ $t('system.email.notificationUser') }} &nbsp;&nbsp;&nbsp;<el-button type="primary" size="mini" plain @click="createUser"><el-icon><Plus/></el-icon></el-button></h3>
         <el-tag
           v-for="item in receivers"
           :key="item.email"
@@ -67,17 +67,17 @@
       </el-form>
       <el-dialog
         title=""
-        :visible.sync="dialogVisible"
+        v-model="dialogVisible"
         width="30%">
         <el-form :model="form">
-          <el-form-item label="用户名" >
+          <el-form-item :label="$t('system.email.username')" >
             <el-input v-model.trim="username"></el-input>
           </el-form-item>
-          <el-form-item label="邮箱地址" >
+          <el-form-item :label="$t('system.email.emailAddress')" >
             <el-input v-model.trim="email"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="saveUser">确 定</el-button>
+            <el-button type="primary" @click="saveUser">{{ $t('system.email.confirm') }}</el-button>
           </el-form-item>
         </el-form>
       </el-dialog>
@@ -86,9 +86,10 @@
 </template>
 
 <script>
-import systemSidebar from '../sidebar'
-import notificationTab from './tab'
+import systemSidebar from '../sidebar.vue'
+import notificationTab from './tab.vue'
 import notificationService from '../../../api/notification'
+import { localizedTemplate, isDefaultTemplate } from '../../../i18n/templates'
 export default {
   name: 'notification-email',
   data () {
@@ -100,27 +101,43 @@ export default {
         password: '',
         template: ''
       },
-      formRules: {
-        host: [
-          {required: true, message: '请输入邮件服务器地址', trigger: 'blur'}
-        ],
-        port: [
-          {type: 'number', required: true, message: '请输入有效的端口', trigger: 'blur'}
-        ],
-        user: [
-          {required: true, message: '请输入用户email', trigger: 'blur'}
-        ],
-        password: [
-          {required: true, message: '请输入密码', trigger: 'blur'}
-        ],
-        template: [
-          {required: true, message: '请输入通知模板内容', trigger: 'blur'}
-        ]
-      },
+      // 模板是否仍为默认值(未被用户自定义), 是则跟随界面语言切换
+      templateIsDefault: true,
       receivers: [],
       username: '',
       email: '',
       dialogVisible: false
+    }
+  },
+  watch: {
+    '$i18n.locale' () {
+      if (this.templateIsDefault) {
+        this.form.template = localizedTemplate('email', this.$i18n.locale)
+      }
+    },
+    'form.template' (val) {
+      this.templateIsDefault = isDefaultTemplate('email', val)
+    }
+  },
+  computed: {
+    formRules () {
+      return {
+        host: [
+          {required: true, message: this.$t('system.email.hostRequired'), trigger: 'blur'}
+        ],
+        port: [
+          {type: 'number', required: true, message: this.$t('system.email.portRequired'), trigger: 'blur'}
+        ],
+        user: [
+          {required: true, message: this.$t('system.email.userRequired'), trigger: 'blur'}
+        ],
+        password: [
+          {required: true, message: this.$t('system.email.passwordRequired'), trigger: 'blur'}
+        ],
+        template: [
+          {required: true, message: this.$t('system.email.templateRequired'), trigger: 'blur'}
+        ]
+      }
     }
   },
   components: {notificationTab, systemSidebar},
@@ -133,7 +150,7 @@ export default {
     },
     saveUser () {
       if (this.username === '' || this.email === '') {
-        this.$message.error('参数不完整')
+        this.$message.error(this.$t('system.email.paramsIncomplete'))
         return
       }
       notificationService.createMailUser({
@@ -159,7 +176,7 @@ export default {
     },
     save () {
       notificationService.updateMail(this.form, () => {
-        this.$message.success('更新成功')
+        this.$message.success(this.$t('system.email.updateSuccess'))
         this.init()
       })
     },
@@ -173,7 +190,12 @@ export default {
         }
         this.form.user = data.user
         this.form.password = data.password
-        this.form.template = data.template
+        // 后端默认模板(中文)未被自定义时, 按当前界面语言展示
+        if (isDefaultTemplate('email', data.template)) {
+          this.form.template = localizedTemplate('email', this.$i18n.locale)
+        } else {
+          this.form.template = data.template
+        }
         this.receivers = data.mail_users
       })
     }

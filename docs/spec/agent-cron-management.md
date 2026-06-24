@@ -284,13 +284,13 @@ gocron 的调度器和后台 UI 由 `gocron web` 进程提供，默认监听 `59
 开发完成后先在本地完成以下验证：
 
 1. 运行 Go 测试：`make test`。
-2. 如果改动 Vue 后台设备授权管理入口，运行前端 lint：`cd web/vue && yarn run lint`。
-3. 如果改动 Vue 页面，构建并重新嵌入静态资源：`make build-vue && make statik`。
+2. 前端依赖安装:`make install-vue`(基于 npm)。
+3. 如果改动 Vue 页面,构建并重新嵌入静态资源:`make build-vue`(产物拷贝到 `web/public`,由 `//go:embed` 嵌入)。
 4. 构建二进制：`make build`。
 5. 本地启动调度器和节点：`make run`，或分别执行 `./bin/gocron web -e dev`、`./bin/gocron-node`。
 6. 验证 `gocron-cli login`、token 刷新、任务创建/修改/启停/运行/停止/日志查询和 `--json` 输出。
 
-`cmd/gocron/gocron.go` 通过 `go:generate statik -src=../../web/public -dest=../../internal -f` 嵌入 `web/public`。因此只改 Go 后端接口时不需要重新构建前端静态资源；只要改动 Vue 或 `web/public`，就必须先执行 `make build-vue`，再执行 `make statik`，最后重新构建 `gocron`。
+`web/embed.go` 通过 Go 原生 `//go:embed all:public` 嵌入 `web/public`(前端为 Vue 3 + Vite + Element Plus,源码在 `web/vue`)。因此只改 Go 后端接口时不需要重新构建前端静态资源;只要改动 Vue 或 `web/public`,就必须先执行 `make build-vue`(把 Vite 产物拷贝到 `web/public`),再重新构建 `gocron`。
 
 ### 数据库变更
 
@@ -318,7 +318,7 @@ make package
 make package-all
 ```
 
-`make package` 会执行 `make build-vue`、`make statik`，再运行 `package.sh` 编译 `gocron` 和 `gocron-node`。当前 `package.sh` 只打包二进制，前端资源已经通过 statik 嵌入 `gocron` 二进制；生产配置和日志目录由运行环境保留。
+`make package` 会执行 `make build-vue`，再运行 `package.sh` 编译 `gocron` 和 `gocron-node`。当前 `package.sh` 只打包二进制，前端资源已经通过 `//go:embed` 嵌入 `gocron` 二进制;生产配置和日志目录由运行环境保留。
 
 新增 `gocron-cli` 后，需要同步扩展 Makefile 和 `package.sh`：
 
@@ -344,11 +344,11 @@ make package-all
 
 ### Docker 部署
 
-上游 Dockerfile 使用多阶段构建：先构建 Vue 静态资源、执行 statik，再编译 `gocron`，最终镜像只包含 `gocron` Web 进程。README 也说明 Docker 镜像不包含 `gocron-node`，节点需要和具体业务一起构建或单独部署。
+上游 Dockerfile 使用多阶段构建：先构建 Vue 静态资源(`make build-vue`,产物经 `//go:embed` 嵌入)，再编译 `gocron`，最终镜像只包含 `gocron` Web 进程。README 也说明 Docker 镜像不包含 `gocron-node`，节点需要和具体业务一起构建或单独部署。
 
 Docker 部署推荐流程：
 
-1. 构建新镜像，确保镜像中包含最新 statik 资源和 `gocron` 二进制。
+1. 构建新镜像，确保镜像中包含最新嵌入的前端资源和 `gocron` 二进制。
 2. 保持 `/app/conf/app.ini`、`/app/conf/install.lock`、`/app/conf/.version` 和 `/app/log` 使用持久化卷或外部配置。
 3. 使用新镜像滚动或重启调度器容器。
 4. 查看容器日志和 `/app/log/cron.log`，确认 migration 和调度器初始化成功。

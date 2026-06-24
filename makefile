@@ -42,30 +42,27 @@ enable-race:
 	$(eval RACE = -race)
 
 .PHONY: package
-package: build-vue statik
+package: build-vue
 	bash ./package.sh
 
 .PHONY: package-all
-package-all: build-vue statik
+package-all: build-vue
 	bash ./package.sh -p 'linux darwin windows'
 
+# 前端构建产物通过 //go:embed 嵌入二进制 (见 web/embed.go), 无需再生成 statik。
 .PHONY: build-vue
 build-vue:
-	cd web/vue && yarn run build
+	cd web/vue && npm run build
+	rm -rf web/public/static web/public/index.html
 	cp -r web/vue/dist/* web/public/
 
 .PHONY: install-vue
 install-vue:
-	cd web/vue && yarn install
+	cd web/vue && npm install
 
 .PHONY: run-vue
 run-vue:
-	cd web/vue && yarn run dev
-
-.PHONY: statik
-statik:
-	go install github.com/rakyll/statik
-	go generate ./...
+	cd web/vue && npm run dev
 
 .PHONY: lint
 	golangci-lint run

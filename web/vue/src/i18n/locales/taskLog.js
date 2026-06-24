@@ -1,0 +1,80 @@
+export default {
+  'zh-CN': {
+    taskLog: {
+      list: {
+        breadcrumbHome: '首页',
+        breadcrumbTask: '任务管理',
+        breadcrumbLog: '任务日志',
+        taskIdPlaceholder: '请输入任务ID',
+        protocolPlaceholder: '执行方式',
+        protocolSelect: '请选择执行方式',
+        statusSelect: '请选择任务状态',
+        searchBtn: '搜索',
+        clearLogBtn: '清空日志',
+        refreshBtn: '刷新',
+        retryTimes: '重试次数',
+        cronExpr: 'cron表达式',
+        command: '命令',
+        idLabel: 'ID',
+        taskIdLabel: '任务ID',
+        nameLabel: '任务名称',
+        protocolLabel: '执行方式',
+        nodeLabel: '任务节点',
+        durationLabel: '执行时长',
+        duration: '执行时长',
+        startTime: '开始时间',
+        endTime: '结束时间',
+        seconds: '秒',
+        statusLabel: '状态',
+        statusFailed: '失败',
+        statusRunning: '执行中',
+        statusSuccess: '成功',
+        statusCancelled: '取消',
+        operationLabel: '操作',
+        viewResultBtn: '查看结果',
+        stopTaskBtn: '停止任务',
+        resultLabel: '执行结果',
+        refreshSuccess: '刷新成功'
+      }
+    }
+  },
+  en: {
+    taskLog: {
+      list: {
+        breadcrumbHome: 'Home',
+        breadcrumbTask: 'Task Management',
+        breadcrumbLog: 'Task Logs',
+        taskIdPlaceholder: 'Please enter task ID',
+        protocolPlaceholder: 'Execution method',
+        protocolSelect: 'Please select execution method',
+        statusSelect: 'Please select task status',
+        searchBtn: 'Search',
+        clearLogBtn: 'Clear Logs',
+        refreshBtn: 'Refresh',
+        retryTimes: 'Retry times',
+        cronExpr: 'Cron expression',
+        command: 'Command',
+        idLabel: 'ID',
+        taskIdLabel: 'Task ID',
+        nameLabel: 'Task Name',
+        protocolLabel: 'Execution Method',
+        nodeLabel: 'Task Node',
+        durationLabel: 'Duration',
+        duration: 'Duration',
+        startTime: 'Start time',
+        endTime: 'End time',
+        seconds: 's',
+        statusLabel: 'Status',
+        statusFailed: 'Failed',
+        statusRunning: 'Running',
+        statusSuccess: 'Success',
+        statusCancelled: 'Cancelled',
+        operationLabel: 'Operation',
+        viewResultBtn: 'View Result',
+        stopTaskBtn: 'Stop Task',
+        resultLabel: 'Result',
+        refreshSuccess: 'Refreshed successfully'
+      }
+    }
+  }
+}

@@ -2,18 +2,20 @@
   <el-container>
     <el-main>
       <el-card class="authorize-card">
-        <div slot="header">
-          <span>CLI 设备授权</span>
-        </div>
+        <template #header>
+          <div>
+            <span>{{ $t('agent.authorize.title') }}</span>
+          </div>
+        </template>
         <div v-if="!isSuperAdmin" class="message error">
-          仅超级管理员可以授权 gocron-cli。
+          {{ $t('agent.authorize.notSuperAdmin') }}
         </div>
         <div v-else-if="success" class="message success">
-          授权成功，可以回到命令行继续操作。
+          {{ $t('agent.authorize.success') }}
         </div>
         <div v-else>
-          <p class="message">确认授权当前 CLI 设备访问 gocron。</p>
-          <el-button type="primary" :loading="loading" @click="approve">确认授权</el-button>
+          <p class="message">{{ $t('agent.authorize.confirmTip') }}</p>
+          <el-button type="primary" :loading="loading" @click="approve">{{ $t('agent.authorize.approveBtn') }}</el-button>
         </div>
       </el-card>
     </el-main>
@@ -42,7 +44,7 @@ export default {
   methods: {
     approve () {
       if (!this.userCode) {
-        this.$message.error('授权码不能为空')
+        this.$message.error(this.$t('agent.authorize.codeEmpty'))
         return
       }
       this.loading = true
