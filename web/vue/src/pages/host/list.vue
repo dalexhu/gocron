@@ -22,8 +22,8 @@
       </el-form>
 
       <el-row type="flex" justify="end">
-        <el-button type="primary" icon="el-icon-edit" @click="toEdit(null)" v-if="this.$store.getters.user.isAdmin">新增</el-button>
-        <el-button type="info" icon="el-icon-refresh" @click="refresh">刷新</el-button>
+        <el-button type="primary" @click="toEdit(null)" v-if="this.$store.getters.user.isAdmin"><el-icon><Edit/></el-icon>新增</el-button>
+        <el-button type="info" @click="refresh"><el-icon><Refresh/></el-icon>刷新</el-button>
       </el-row>
 
       <el-table
@@ -57,7 +57,7 @@
           label="操作"
           width="180"
           v-if="this.isAdmin">
-          <template slot-scope="scope">
+          <template #default="scope">
             <el-row>
               <el-button size="small" type="primary" @click="toEdit(scope.row)">编辑</el-button>
               <el-button size="small" type="success" @click="toTasks(scope.row)">查看任务</el-button>
@@ -88,7 +88,7 @@
 </template>
 
 <script>
-import hostSidebar from './sidebar'
+import hostSidebar from './sidebar.vue'
 import hostService from '../../api/host'
 export default {
   name: 'host-list',

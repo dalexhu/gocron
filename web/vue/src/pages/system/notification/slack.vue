@@ -24,7 +24,7 @@
         <el-form-item>
           <el-button type="primary" @click="submit">保存</el-button>
         </el-form-item>
-        <h3>Channel &nbsp;&nbsp;&nbsp;<el-button type="primary" size="mini" icon="el-icon-plus" plain @click="createChannel"></el-button></h3>
+        <h3>Channel &nbsp;&nbsp;&nbsp;<el-button type="primary" size="mini" plain @click="createChannel"><el-icon><Plus/></el-icon></el-button></h3>
         <el-tag
           v-for="item in channels"
           :key="item.id"
@@ -36,7 +36,7 @@
       </el-form>
       <el-dialog
         title=""
-        :visible.sync="dialogVisible"
+        v-model="dialogVisible"
         width="30%">
         <el-form :model="form">
           <el-form-item label="Channel名称" >
@@ -52,8 +52,8 @@
 </template>
 
 <script>
-import systemSidebar from '../sidebar'
-import notificationTab from './tab'
+import systemSidebar from '../sidebar.vue'
+import notificationTab from './tab.vue'
 import notificationService from '../../../api/notification'
 export default {
   name: 'notification-slack',

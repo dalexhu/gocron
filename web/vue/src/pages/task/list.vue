@@ -55,14 +55,14 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" icon="el-icon-search" @click="search()">搜索</el-button>
-          <el-button type="info" icon="el-icon-circle-close-outline" @click="resetSearch()">重置</el-button>
+          <el-button type="primary" @click="search()"><el-icon><Search/></el-icon>搜索</el-button>
+          <el-button type="info" @click="resetSearch()"><el-icon><CircleClose/></el-icon>重置</el-button>
         </el-form-item>
       </el-row>
     </el-form>
     <el-row type="flex" justify="end">
-        <el-button type="primary" icon="el-icon-edit" @click="toEdit(null)" v-if="this.$store.getters.user.isAdmin">新增</el-button>
-        <el-button type="info" icon="el-icon-refresh" @click="refresh">刷新</el-button>
+        <el-button type="primary" @click="toEdit(null)" v-if="this.$store.getters.user.isAdmin"><el-icon><Edit/></el-icon>新增</el-button>
+        <el-button type="info" @click="refresh"><el-icon><Refresh/></el-icon>刷新</el-button>
     </el-row>
     <el-table
       :data="tasks"
@@ -71,25 +71,25 @@
       show-header
       style="width: 100%; margin: 20px 0;">
       <el-table-column type="expand">
-        <template slot-scope="scope">
+        <template #default="scope">
           <el-form label-position="left" inline class="demo-table-expand">
             <el-form-item label="任务创建时间:">
-              {{scope.row.created | formatTime}} <br>
+              {{$formatTime(scope.row.created)}} <br>
             </el-form-item>
             <el-form-item label="任务类型:">
-              {{scope.row.level | formatLevel}} <br>
+              {{formatLevel(scope.row.level)}} <br>
             </el-form-item>
             <el-form-item label="单实例运行:">
-               {{scope.row.multi | formatMulti}} <br>
+               {{formatMulti(scope.row.multi)}} <br>
             </el-form-item>
             <el-form-item label="超时时间:">
-              {{scope.row.timeout | formatTimeout}} <br>
+              {{formatTimeout(scope.row.timeout)}} <br>
             </el-form-item>
             <el-form-item label="重试次数:">
               {{scope.row.retry_times}} <br>
             </el-form-item>
             <el-form-item label="重试间隔:">
-              {{scope.row.retry_interval | formatRetryTimesInterval}}
+              {{formatRetryTimesInterval(scope.row.retry_interval)}}
             </el-form-item> <br>
             <el-form-item label="任务节点">
               <div v-for="item in scope.row.hosts" :key="item.host_id">
@@ -116,7 +116,7 @@
       <el-table-column
         prop="tag"
         label="标签" width="200">
-        <template slot-scope="scope">
+        <template #default="scope">
           <el-button size="mini" class="box-shadow-not" type="success" plain @click="toTasksByTag(scope.row)" v-if="scope.row.tag">{{scope.row.tag}}</el-button>
         </template>
       </el-table-column>
@@ -126,8 +126,8 @@
       width="200">
       </el-table-column>
       <el-table-column label="下次执行时间" width="200">
-        <template slot-scope="scope">
-          {{scope.row.next_run_time | formatTime}}
+        <template #default="scope">
+          {{$formatTime(scope.row.next_run_time)}}
         </template>
       </el-table-column>
       <el-table-column
@@ -137,7 +137,7 @@
       </el-table-column>
       <el-table-column
         label="状态" width="100" v-if="this.isAdmin" >
-          <template slot-scope="scope">
+          <template #default="scope">
             <el-switch
               v-if="scope.row.level === 1"
               v-model="scope.row.status"
@@ -151,7 +151,7 @@
           </template>
       </el-table-column>
       <el-table-column label="状态" width="100" v-else>
-        <template slot-scope="scope">
+        <template #default="scope">
           <el-switch
             v-if="scope.row.level === 1"
             v-model="scope.row.status"
@@ -169,7 +169,7 @@
         label="操作"
         width="180"
         v-if="this.isAdmin">
-        <template slot-scope="scope">
+        <template #default="scope">
           <el-row>
             <el-button type="primary" size="small" @click="toEdit(scope.row)" :disabled="!checkAuth(scope.row)">编辑</el-button>
             <el-button type="success" size="small" @click="runTask(scope.row)" :disabled="!checkAuth(scope.row)">手动执行</el-button>
@@ -199,7 +199,7 @@
 </template>
 
 <script>
-import taskSidebar from './sidebar'
+import taskSidebar from './sidebar.vue'
 import taskService from '../../api/task'
 
 export default {
@@ -252,7 +252,7 @@ export default {
 
     this.search()
   },
-  filters: {
+  methods: {
     formatLevel (value) {
       if (value === 1) {
         return '主任务'
@@ -276,9 +276,7 @@ export default {
         return '否'
       }
       return '是'
-    }
-  },
-  methods: {
+    },
     changeStatus (item) {
       if (item.status) {
         taskService.enable(item.id)

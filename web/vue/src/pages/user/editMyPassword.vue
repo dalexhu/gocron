@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import userSidebar from './sidebar'
+import userSidebar from './sidebar.vue'
 import userService from '../../api/user'
 export default {
   name: 'user-edit-my-password',

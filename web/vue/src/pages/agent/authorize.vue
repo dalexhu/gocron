@@ -2,9 +2,11 @@
   <el-container>
     <el-main>
       <el-card class="authorize-card">
-        <div slot="header">
-          <span>CLI 设备授权</span>
-        </div>
+        <template #header>
+          <div>
+            <span>CLI 设备授权</span>
+          </div>
+        </template>
         <div v-if="!isSuperAdmin" class="message error">
           仅超级管理员可以授权 gocron-cli。
         </div>

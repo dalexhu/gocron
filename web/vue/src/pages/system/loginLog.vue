@@ -27,8 +27,8 @@
         <el-table-column
           label="登录时间"
           width="">
-          <template slot-scope="scope">
-            {{scope.row.created | formatTime}}
+          <template #default="scope">
+            {{$formatTime(scope.row.created)}}
           </template>
         </el-table-column>
       </el-table>
@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import systemSidebar from './sidebar'
+import systemSidebar from './sidebar.vue'
 import systemService from '../../api/system'
 export default {
   name: 'login-log',

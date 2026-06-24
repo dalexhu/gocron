@@ -8,13 +8,13 @@
       <el-table-column prop="last_used_at" label="最近使用"></el-table-column>
       <el-table-column prop="expires_at" label="过期时间"></el-table-column>
       <el-table-column label="状态">
-        <template slot-scope="scope">
+        <template #default="scope">
           <el-tag v-if="scope.row.revoked_at && scope.row.revoked_at !== '0001-01-01T00:00:00Z'" type="info">已撤销</el-tag>
           <el-tag v-else type="success">有效</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="操作" width="120">
-        <template slot-scope="scope">
+        <template #default="scope">
           <el-button size="mini" type="danger" @click="revoke(scope.row.device_id)">撤销</el-button>
         </template>
       </el-table-column>

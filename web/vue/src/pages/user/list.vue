@@ -8,8 +8,8 @@
           <el-breadcrumb-item>用户列表</el-breadcrumb-item>
       </el-breadcrumb>
       <el-row type="flex" justify="end">
-        <el-button type="primary" icon="el-icon-edit" @click="toEdit(null)" v-if="this.$store.getters.user.isSuperAdmin">新增</el-button>
-        <el-button type="info" icon="el-icon-refresh" @click="refresh">刷新</el-button>
+        <el-button type="primary" @click="toEdit(null)" v-if="this.$store.getters.user.isSuperAdmin"><el-icon><Edit/></el-icon>新增</el-button>
+        <el-button type="info" @click="refresh"><el-icon><Refresh/></el-icon>刷新</el-button>
       </el-row>
 
       <el-table
@@ -37,7 +37,7 @@
         </el-table-column>
         <el-table-column
           label="状态">
-          <template slot-scope="scope">
+          <template #default="scope">
             <el-switch
               v-model="scope.row.status"
               :active-value="1"
@@ -54,7 +54,7 @@
           label="操作"
           width="250"
           v-if="this.isSuperAdmin">
-          <template slot-scope="scope">
+          <template #default="scope">
             <el-row>
               <el-button size="small" type="primary" @click="toEdit(scope.row)">编辑</el-button>
               <el-button size="small" type="success" @click="editPassword(scope.row)">修改密码</el-button>
@@ -81,7 +81,7 @@
 </template>
 
 <script>
-import userSidebar from './sidebar'
+import userSidebar from './sidebar.vue'
 import userService from '../../api/user'
 export default {
   name: 'user-list',

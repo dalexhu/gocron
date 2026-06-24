@@ -36,15 +36,15 @@
         </el-row>
 
         <el-form-item label="模板" prop="template">
-          <span slot="label">
+          <template #label>
             模板
             <el-tooltip placement="top">
-              <div slot="content">
+              <template #content>
                 通知模板支持html
-              </div>
-              <i class="el-icon-question"></i>
+              </template>
+              <el-icon><QuestionFilled/></el-icon>
             </el-tooltip>
-          </span>
+          </template>
           <el-input
             type="textarea"
             :rows="6"
@@ -56,7 +56,7 @@
           <el-button type="primary" @click="submit()">保存</el-button>
         </el-form-item>
         <br>
-        <h3>通知用户 &nbsp;&nbsp;&nbsp;<el-button type="primary" size="mini" icon="el-icon-plus" plain @click="createUser"></el-button></h3>
+        <h3>通知用户 &nbsp;&nbsp;&nbsp;<el-button type="primary" size="mini" plain @click="createUser"><el-icon><Plus/></el-icon></el-button></h3>
         <el-tag
           v-for="item in receivers"
           :key="item.email"
@@ -67,7 +67,7 @@
       </el-form>
       <el-dialog
         title=""
-        :visible.sync="dialogVisible"
+        v-model="dialogVisible"
         width="30%">
         <el-form :model="form">
           <el-form-item label="用户名" >
@@ -86,8 +86,8 @@
 </template>
 
 <script>
-import systemSidebar from '../sidebar'
-import notificationTab from './tab'
+import systemSidebar from '../sidebar.vue'
+import notificationTab from './tab.vue'
 import notificationService from '../../../api/notification'
 export default {
   name: 'notification-email',

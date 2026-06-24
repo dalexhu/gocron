@@ -2,7 +2,7 @@
     <div>
       <el-dialog
         title="用户登录"
-        :visible.sync="dialogVisible"
+        v-model="dialogVisible"
         :close-on-click-modal="false"
         :show-close="false"
         :close-on-press-escape="false"

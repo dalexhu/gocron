@@ -10,15 +10,15 @@
       <notification-tab></notification-tab>
       <el-form ref="form" :model="form" :rules="formRules" label-width="100px" style="width: 700px;">
         <el-form-item label="URL" prop="url">
-          <span slot="label">
+          <template #label>
             URL
             <el-tooltip placement="top-start">
-              <div slot="content">
+              <template #content>
                 通知内容推送到指定URL, POST请求, 设置Header [Content-Type: application/json]
-              </div>
-              <i class="el-icon-question"></i>
+              </template>
+              <el-icon><QuestionFilled/></el-icon>
             </el-tooltip>
-          </span>
+          </template>
           <el-input v-model.trim="form.url"></el-input>
         </el-form-item>
         <el-form-item label="模板" prop="template">
@@ -38,8 +38,8 @@
 </template>
 
 <script>
-import systemSidebar from '../sidebar'
-import notificationTab from './tab'
+import systemSidebar from '../sidebar.vue'
+import notificationTab from './tab.vue'
 import notificationService from '../../../api/notification'
 export default {
   name: 'notification-webhook',

@@ -30,34 +30,40 @@
                 <el-radio :label="0">
                   普通用户
                   <el-tooltip placement="top">
-                    <div slot="content">
-                      权限简要:<br/><br/>
-                      - 查看所有任务和日志
-                    </div>
-                    <i class="el-icon-question"></i>
+                    <template #content>
+                      <div>
+                        权限简要:<br/><br/>
+                        - 查看所有任务和日志
+                      </div>
+                    </template>
+                    <el-icon><QuestionFilled/></el-icon>
                   </el-tooltip>
                 </el-radio>
                 <el-radio :label="1">
                   管理员
                   <el-tooltip placement="top">
-                    <div slot="content">
-                      权限简要:<br/><br/>
-                      - 查看所有任务和日志<br/>
-                      - 管理自己的任务
-                    </div>
-                    <i class="el-icon-question"></i>
+                    <template #content>
+                      <div>
+                        权限简要:<br/><br/>
+                        - 查看所有任务和日志<br/>
+                        - 管理自己的任务
+                      </div>
+                    </template>
+                    <el-icon><QuestionFilled/></el-icon>
                   </el-tooltip>
                 </el-radio>
                 <el-radio :label="2">
                   超级管理员
                   <el-tooltip placement="top">
-                    <div slot="content">
-                      权限简要:<br/><br/>
-                      - 管理所有任务和日志<br/>
-                      - 用户管理<br/>
-                      - 系统管理
-                    </div>
-                    <i class="el-icon-question"></i>
+                    <template #content>
+                      <div>
+                        权限简要:<br/><br/>
+                        - 管理所有任务和日志<br/>
+                        - 用户管理<br/>
+                        - 系统管理
+                      </div>
+                    </template>
+                    <el-icon><QuestionFilled/></el-icon>
                   </el-tooltip>
                 </el-radio>
               </el-radio-group>
@@ -80,7 +86,7 @@
 </template>
 
 <script>
-import userSidebar from './sidebar'
+import userSidebar from './sidebar.vue'
 import userService from '../../api/user'
 export default {
   name: 'user-edit',

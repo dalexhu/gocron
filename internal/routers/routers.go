@@ -2,6 +2,7 @@ package routers
 
 import (
 	"io"
+	"io/fs"
 	"log"
 	"net/http"
 	"strconv"
@@ -22,10 +23,8 @@ import (
 	"github.com/ouqiang/gocron/internal/routers/task"
 	"github.com/ouqiang/gocron/internal/routers/tasklog"
 	"github.com/ouqiang/gocron/internal/routers/user"
-	"github.com/rakyll/statik/fs"
+	"github.com/ouqiang/gocron/web"
 	"gopkg.in/macaron.v1"
-
-	_ "github.com/ouqiang/gocron/internal/statik"
 )
 
 const (
@@ -33,14 +32,16 @@ const (
 	staticDir = "public"
 )
 
-var statikFS http.FileSystem
+// staticFS 前端静态资源文件系统, 由 //go:embed 嵌入的 web/public 提供。
+var staticFS http.FileSystem
 
 func init() {
-	var err error
-	statikFS, err = fs.New()
+	// web.Public 的根目录为 public/, 取其子目录使根路径直接对应静态资源根。
+	sub, err := fs.Sub(web.Public, "public")
 	if err != nil {
 		log.Fatal(err)
 	}
+	staticFS = http.FS(sub)
 }
 
 // Register 路由注册
@@ -49,7 +50,7 @@ func Register(m *macaron.Macaron) {
 	// 所有GET方法，自动注册HEAD方法
 	m.SetAutoHead(true)
 	m.Get("/", func(ctx *macaron.Context) {
-		file, err := statikFS.Open("/index.html")
+		file, err := staticFS.Open("/index.html")
 		if err != nil {
 			logger.Error("读取首页文件失败: %s", err)
 			ctx.WriteHeader(http.StatusInternalServerError)
@@ -188,7 +189,7 @@ func RegisterMiddleware(m *macaron.Macaron) {
 			"",
 			macaron.StaticOptions{
 				Prefix:     staticDir,
-				FileSystem: statikFS,
+				FileSystem: staticFS,
 			},
 		),
 	)

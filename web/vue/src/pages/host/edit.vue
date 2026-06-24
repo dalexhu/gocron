@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import hostSidebar from './sidebar'
+import hostSidebar from './sidebar.vue'
 import hostService from '../../api/host'
 export default {
   name: 'edit',

@@ -15,48 +15,48 @@
         </el-col>
         <el-col :span="2">
           <el-menu-item index="/task">
-            <i class="el-icon-menu"></i>
-            <span slot="title">任务管理</span>
+            <el-icon><Menu/></el-icon>
+            <span>任务管理</span>
           </el-menu-item>
         </el-col>
         <el-col :span="2">
           <el-menu-item index="/host">
-            <i class="el-icon-upload"></i>
-            <span slot="title">任务节点</span>
+            <el-icon><Upload/></el-icon>
+            <span>任务节点</span>
           </el-menu-item>
         </el-col>
         <el-col :span="2">
           <el-menu-item v-if="this.$store.getters.user.isSuperAdmin" index="/user">
-            <i class="el-icon-service"></i>
-            <span slot="title">用户管理</span>
+            <el-icon><Service/></el-icon>
+            <span>用户管理</span>
           </el-menu-item>
         </el-col>
         <el-col :span="2">
           <el-menu-item v-if="this.$store.getters.user.isSuperAdmin" index="/agent/devices">
-            <i class="el-icon-mobile-phone"></i>
-            <span slot="title">Agent授权</span>
+            <el-icon><Iphone/></el-icon>
+            <span>Agent授权</span>
           </el-menu-item>
         </el-col>
         <el-col :span="2">
           <el-menu-item v-if="this.$store.getters.user.isSuperAdmin" index="/system">
-            <i class="el-icon-setting"></i>
-            <span slot="title">系统管理</span>
+            <el-icon><Setting/></el-icon>
+            <span>系统管理</span>
           </el-menu-item>
         </el-col>
         <el-col style="float:right; text-align:right; width:205px" >
-          <el-submenu v-if="this.$store.getters.user.token" index="userStatus">
-            <template slot="title">
-              <span slot="title" style="margin-right: 30px; font-size: 16px">{{this.$store.getters.user.username}}</span>
+          <el-sub-menu v-if="this.$store.getters.user.token" index="userStatus">
+            <template #title>
+              <span style="margin-right: 30px; font-size: 16px">{{this.$store.getters.user.username}}</span>
             </template>
               <el-menu-item index="/user/edit-my-password">
-                <i class="el-icon-edit-outline"></i>
+                <el-icon><EditPen/></el-icon>
                 <span>修改密码</span>
               </el-menu-item>
               <el-menu-item @click="logout" index="/user/logout">
-                <i class="el-icon-circle-close-outline"></i>
+                <el-icon><CircleClose/></el-icon>
                 <span>退出</span>
               </el-menu-item>
-          </el-submenu>
+          </el-sub-menu>
         </el-col>
       </el-row>
     </el-menu>

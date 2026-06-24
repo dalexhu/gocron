@@ -1,5 +1,5 @@
 import axios from 'axios'
-import {Message} from 'element-ui'
+import { ElMessage } from 'element-plus'
 import router from '../router/index'
 import store from '../store/index'
 import Qs from 'qs'
@@ -19,7 +19,7 @@ axios.interceptors.request.use(config => {
   config.headers['Auth-Token'] = store.getters.user.token
   return config
 }, error => {
-  Message.error({
+  ElMessage.error({
     message: errorMessage
   })
 
@@ -29,7 +29,7 @@ axios.interceptors.request.use(config => {
 axios.interceptors.response.use(data => {
   return data
 }, error => {
-  Message.error({
+  ElMessage.error({
     message: errorMessage
   })
 
@@ -53,7 +53,7 @@ function checkResponseCode (code, msg) {
       return false
   }
   if (code !== SUCCESS_CODE) {
-    Message.error({
+    ElMessage.error({
       message: msg
     })
     return false
@@ -73,7 +73,7 @@ function successCallback (res, next) {
 }
 
 function failureCallback (error) {
-  Message.error({
+  ElMessage.error({
     message: '请求失败 - ' + error
   })
 }
