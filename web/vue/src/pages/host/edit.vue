@@ -3,24 +3,24 @@
     <host-sidebar></host-sidebar>
     <el-main>
       <el-breadcrumb separator-class="el-icon-arrow-right" style="margin-bottom:20px">
-          <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-          <el-breadcrumb-item :to="{ path: '/host' }">任务节点</el-breadcrumb-item>
-          <el-breadcrumb-item>编辑</el-breadcrumb-item>
+          <el-breadcrumb-item :to="{ path: '/' }">{{ $t('host.edit.breadcrumbHome') }}</el-breadcrumb-item>
+          <el-breadcrumb-item :to="{ path: '/host' }">{{ $t('host.edit.breadcrumbHost') }}</el-breadcrumb-item>
+          <el-breadcrumb-item>{{ $t('host.edit.breadcrumbEdit') }}</el-breadcrumb-item>
       </el-breadcrumb>
       <el-form ref="form" class="page-form" :model="form" :rules="formRules" label-width="100px">
         <el-row>
           <el-col :span="8">
             <el-input v-model="form.id" type="hidden"></el-input>
-            <el-form-item label="节点名" prop="alias">
+            <el-form-item :label="$t('host.edit.aliasLabel')" prop="alias">
               <el-input v-model="form.alias"></el-input>
             </el-form-item>
-            <el-form-item label="主机名" prop="name">
+            <el-form-item :label="$t('host.edit.nameLabel')" prop="name">
               <el-input v-model="form.name"></el-input>
             </el-form-item>
-            <el-form-item label="端口号" prop="port">
+            <el-form-item :label="$t('host.edit.portLabel')" prop="port">
               <el-input v-model.number="form.port"></el-input>
             </el-form-item>
-            <el-form-item label="备注">
+            <el-form-item :label="$t('host.edit.remarkLabel')">
               <el-input
                 type="textarea"
                 :rows="5"
@@ -30,8 +30,8 @@
               </el-input>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="submit()">保存</el-button>
-              <el-button @click="cancel">取消</el-button>
+              <el-button type="primary" @click="submit()">{{ $t('host.edit.saveBtn') }}</el-button>
+              <el-button @click="cancel">{{ $t('host.edit.cancelBtn') }}</el-button>
             </el-form-item>
           </el-col>
         </el-row>
@@ -53,17 +53,21 @@ export default {
         port: 5921,
         alias: '',
         remark: ''
-      },
-      formRules: {
+      }
+    }
+  },
+  computed: {
+    formRules () {
+      return {
         name: [
-          {required: true, message: '请输入主机名', trigger: 'blur'}
+          {required: true, message: this.$t('host.edit.nameRequired'), trigger: 'blur'}
         ],
         port: [
-          {required: true, message: '请输入端口', trigger: 'blur'},
-          {type: 'number', message: '端口无效'}
+          {required: true, message: this.$t('host.edit.portRequired'), trigger: 'blur'},
+          {type: 'number', message: this.$t('host.edit.portInvalid')}
         ],
         alias: [
-          {required: true, message: '请输入节点名称', trigger: 'blur'}
+          {required: true, message: this.$t('host.edit.aliasRequired'), trigger: 'blur'}
         ]
       }
     }
@@ -76,7 +80,7 @@ export default {
     }
     hostService.detail(id, (data) => {
       if (!data) {
-        this.$message.error('数据不存在')
+        this.$message.error(this.$t('host.edit.notExist'))
         this.cancel()
         return
       }

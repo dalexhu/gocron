@@ -9,11 +9,11 @@
       router>
       <el-menu-item index="/system">
         <el-icon><Bell/></el-icon>
-        <span>通知配置</span>
+        <span>{{ $t('sidebar.notification') }}</span>
       </el-menu-item>
       <el-menu-item index="/system/login-log">
         <el-icon><Document/></el-icon>
-        <span>登录日志</span>
+        <span>{{ $t('sidebar.loginLog') }}</span>
       </el-menu-item>
     </el-menu>
   </el-aside>

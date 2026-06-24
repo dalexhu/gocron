@@ -3,27 +3,27 @@
   <task-sidebar></task-sidebar>
   <el-main>
     <el-breadcrumb separator-class="el-icon-arrow-right" style="margin-bottom:20px">
-      <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item :to="{ path: '/task' }">任务管理</el-breadcrumb-item>
-      <el-breadcrumb-item>定时任务</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: '/' }">{{ $t('task.list.breadcrumbHome') }}</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: '/task' }">{{ $t('task.list.breadcrumbTask') }}</el-breadcrumb-item>
+      <el-breadcrumb-item>{{ $t('task.list.breadcrumbCron') }}</el-breadcrumb-item>
     </el-breadcrumb>
     <el-form :inline="true" >
       <el-row>
         <el-form-item label="">
-          <el-input placeholder="请输入任务ID" v-model.trim="searchParams.id"></el-input>
+          <el-input :placeholder="$t('task.list.idPlaceholder')" v-model.trim="searchParams.id"></el-input>
         </el-form-item>
         <el-form-item label="">
-          <el-input placeholder="请输入任务名称" v-model.trim="searchParams.name"></el-input>
+          <el-input :placeholder="$t('task.list.namePlaceholder')" v-model.trim="searchParams.name"></el-input>
         </el-form-item>
         <el-form-item label="">
-          <el-input placeholder="请输入任务命令" v-model.trim="searchParams.command"></el-input>
+          <el-input :placeholder="$t('task.list.commandPlaceholder')" v-model.trim="searchParams.command"></el-input>
         </el-form-item>
         <el-form-item label="">
-          <el-input placeholder="请输入标签" v-model.trim="searchParams.tag"></el-input>
+          <el-input :placeholder="$t('task.list.tagPlaceholder')" v-model.trim="searchParams.tag"></el-input>
         </el-form-item>
         <el-form-item label="">
           <el-select v-model.trim="searchParams.protocol">
-            <el-option label="请选择执行方式" value=""></el-option>
+            <el-option :label="$t('task.list.protocolPlaceholder')" value=""></el-option>
             <el-option
               v-for="item in protocolList"
               :key="item.value"
@@ -34,7 +34,7 @@
         </el-form-item>
         <el-form-item label="">
           <el-select v-model.trim="searchParams.host_id">
-            <el-option label="请选择任务节点" value=""></el-option>
+            <el-option :label="$t('task.list.hostPlaceholder')" value=""></el-option>
             <el-option
               v-for="item in hosts"
               :key="item.id"
@@ -45,7 +45,7 @@
         </el-form-item>
         <el-form-item label="">
           <el-select v-model.trim="searchParams.status">
-            <el-option label="请选择任务状态" value=""></el-option>
+            <el-option :label="$t('task.list.statusPlaceholder')" value=""></el-option>
             <el-option
               v-for="item in statusList"
               :key="item.value"
@@ -55,14 +55,14 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="search()"><el-icon><Search/></el-icon>搜索</el-button>
-          <el-button type="info" @click="resetSearch()"><el-icon><CircleClose/></el-icon>重置</el-button>
+          <el-button type="primary" @click="search()"><el-icon><Search/></el-icon>{{ $t('task.list.searchBtn') }}</el-button>
+          <el-button type="info" @click="resetSearch()"><el-icon><CircleClose/></el-icon>{{ $t('task.list.resetBtn') }}</el-button>
         </el-form-item>
       </el-row>
     </el-form>
     <el-row type="flex" justify="end">
-        <el-button type="primary" @click="toEdit(null)" v-if="this.$store.getters.user.isAdmin"><el-icon><Edit/></el-icon>新增</el-button>
-        <el-button type="info" @click="refresh"><el-icon><Refresh/></el-icon>刷新</el-button>
+        <el-button type="primary" @click="toEdit(null)" v-if="this.$store.getters.user.isAdmin"><el-icon><Edit/></el-icon>{{ $t('task.list.addBtn') }}</el-button>
+        <el-button type="info" @click="refresh"><el-icon><Refresh/></el-icon>{{ $t('task.list.refreshBtn') }}</el-button>
     </el-row>
     <el-table
       :data="tasks"
@@ -73,33 +73,33 @@
       <el-table-column type="expand">
         <template #default="scope">
           <el-form label-position="left" inline class="demo-table-expand">
-            <el-form-item label="任务创建时间:">
+            <el-form-item :label="$t('task.list.createdLabel')">
               {{$formatTime(scope.row.created)}} <br>
             </el-form-item>
-            <el-form-item label="任务类型:">
+            <el-form-item :label="$t('task.list.levelLabel')">
               {{formatLevel(scope.row.level)}} <br>
             </el-form-item>
-            <el-form-item label="单实例运行:">
+            <el-form-item :label="$t('task.list.multiLabel')">
                {{formatMulti(scope.row.multi)}} <br>
             </el-form-item>
-            <el-form-item label="超时时间:">
+            <el-form-item :label="$t('task.list.timeoutLabel')">
               {{formatTimeout(scope.row.timeout)}} <br>
             </el-form-item>
-            <el-form-item label="重试次数:">
+            <el-form-item :label="$t('task.list.retryTimesLabel')">
               {{scope.row.retry_times}} <br>
             </el-form-item>
-            <el-form-item label="重试间隔:">
+            <el-form-item :label="$t('task.list.retryIntervalLabel')">
               {{formatRetryTimesInterval(scope.row.retry_interval)}}
             </el-form-item> <br>
-            <el-form-item label="任务节点">
+            <el-form-item :label="$t('task.list.hostsLabel')">
               <div v-for="item in scope.row.hosts" :key="item.host_id">
                 {{item.alias}} - {{item.name}}:{{item.port}} <br>
               </div>
             </el-form-item> <br>
-            <el-form-item label="命令:" style="width: 100%">
+            <el-form-item :label="$t('task.list.commandLabel')" style="width: 100%">
               {{scope.row.command}}
             </el-form-item> <br>
-            <el-form-item label="备注" style="width: 100%">
+            <el-form-item :label="$t('task.list.remarkLabel')" style="width: 100%">
               {{scope.row.remark}}
             </el-form-item>
           </el-form>
@@ -107,25 +107,25 @@
       </el-table-column>
       <el-table-column
         prop="id"
-        label="任务ID" width="100">
+        :label="$t('task.list.idLabel')" width="100">
       </el-table-column>
       <el-table-column
         prop="name"
-        label="任务名称" style="width: 30%">
+        :label="$t('task.list.nameLabel')" style="width: 30%">
       </el-table-column>
       <el-table-column
         prop="tag"
-        label="标签" width="200">
+        :label="$t('task.list.tagLabel')" width="200">
         <template #default="scope">
           <el-button size="mini" class="box-shadow-not" type="success" plain @click="toTasksByTag(scope.row)" v-if="scope.row.tag">{{scope.row.tag}}</el-button>
         </template>
       </el-table-column>
       <el-table-column
         prop="spec"
-        label="cron表达式"
+        :label="$t('task.list.specLabel')"
       width="200">
       </el-table-column>
-      <el-table-column label="下次执行时间" width="200">
+      <el-table-column :label="$t('task.list.nextRunTimeLabel')" width="200">
         <template #default="scope">
           {{$formatTime(scope.row.next_run_time)}}
         </template>
@@ -133,10 +133,10 @@
       <el-table-column
         prop="protocol"
         :formatter="formatProtocol"
-        label="执行方式" width="100">
+        :label="$t('task.list.protocolLabel')" width="100">
       </el-table-column>
       <el-table-column
-        label="状态" width="100" v-if="this.isAdmin" >
+        :label="$t('task.list.statusLabel')" width="100" v-if="this.isAdmin" >
           <template #default="scope">
             <el-switch
               v-if="scope.row.level === 1"
@@ -150,7 +150,7 @@
             </el-switch>
           </template>
       </el-table-column>
-      <el-table-column label="状态" width="100" v-else>
+      <el-table-column :label="$t('task.list.statusLabel')" width="100" v-else>
         <template #default="scope">
           <el-switch
             v-if="scope.row.level === 1"
@@ -166,18 +166,18 @@
       <el-table-column
         align="center"
         header-align="left"
-        label="操作"
+        :label="$t('task.list.operationLabel')"
         width="180"
         v-if="this.isAdmin">
         <template #default="scope">
           <el-row>
-            <el-button type="primary" size="small" @click="toEdit(scope.row)" :disabled="!checkAuth(scope.row)">编辑</el-button>
-            <el-button type="success" size="small" @click="runTask(scope.row)" :disabled="!checkAuth(scope.row)">手动执行</el-button>
+            <el-button type="primary" size="small" @click="toEdit(scope.row)" :disabled="!checkAuth(scope.row)">{{ $t('task.list.editBtn') }}</el-button>
+            <el-button type="success" size="small" @click="runTask(scope.row)" :disabled="!checkAuth(scope.row)">{{ $t('task.list.runBtn') }}</el-button>
           </el-row>
           <br>
           <el-row>
-            <el-button type="danger" size="small" @click="remove(scope.row)" :disabled="!checkAuth(scope.row)">删除</el-button>
-            <el-button type="info" size="small" @click="jumpToLog(scope.row)">查看日志</el-button>
+            <el-button type="danger" size="small" @click="remove(scope.row)" :disabled="!checkAuth(scope.row)">{{ $t('task.list.deleteBtn') }}</el-button>
+            <el-button type="info" size="small" @click="jumpToLog(scope.row)">{{ $t('task.list.viewLogBtn') }}</el-button>
           </el-row>
         </template>
       </el-table-column>
@@ -220,8 +220,13 @@ export default {
         status: '',
         command: ''
       },
-      isAdmin: this.$store.getters.user.isAdmin,
-      protocolList: [
+      isAdmin: this.$store.getters.user.isAdmin
+    }
+  },
+  components: {taskSidebar},
+  computed: {
+    protocolList () {
+      return [
         {
           value: '1',
           label: 'http'
@@ -230,20 +235,21 @@ export default {
           value: '2',
           label: 'shell'
         }
-      ],
-      statusList: [
+      ]
+    },
+    statusList () {
+      return [
         {
           value: '2',
-          label: '激活'
+          label: this.$t('task.list.statusActive')
         },
         {
           value: '1',
-          label: '停止'
+          label: this.$t('task.list.statusStopped')
         }
       ]
     }
   },
-  components: {taskSidebar},
   created () {
     const hostId = this.$route.query.host_id
     if (hostId) {
@@ -255,27 +261,27 @@ export default {
   methods: {
     formatLevel (value) {
       if (value === 1) {
-        return '主任务'
+        return this.$t('task.list.levelMain')
       }
-      return '子任务'
+      return this.$t('task.list.levelSub')
     },
     formatTimeout (value) {
       if (value > 0) {
-        return value + '秒'
+        return value + this.$t('task.list.timeoutUnit')
       }
-      return '不限制'
+      return this.$t('task.list.timeoutUnlimited')
     },
     formatRetryTimesInterval (value) {
       if (value > 0) {
-        return value + '秒'
+        return value + this.$t('task.list.retryIntervalUnit')
       }
-      return '系统默认'
+      return this.$t('task.list.retryIntervalDefault')
     },
     formatMulti (value) {
       if (value > 0) {
-        return '否'
+        return this.$t('task.list.multiNo')
       }
-      return '是'
+      return this.$t('task.list.multiYes')
     },
     changeStatus (item) {
       if (item.status) {
@@ -318,7 +324,7 @@ export default {
     runTask (item) {
       this.$appConfirm(() => {
         taskService.run(item.id, () => {
-          this.$message.success('任务已开始执行')
+          this.$message.success(this.$t('task.list.runSuccess'))
         })
       }, true)
     },
@@ -334,7 +340,7 @@ export default {
     },
     refresh () {
       this.search(() => {
-        this.$message.success('刷新成功')
+        this.$message.success(this.$t('task.list.refreshSuccess'))
       })
     },
     checkAuth (item) {

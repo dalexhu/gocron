@@ -1,15 +1,17 @@
 <template>
-  <el-container>
-    <el-header height="56px">
-      <app-header></app-header>
-      <app-nav-menu></app-nav-menu>
-    </el-header>
-    <el-main >
-      <div id="main-container" v-cloak>
-        <router-view/>
-      </div>
-    </el-main>
-  </el-container>
+  <el-config-provider :locale="elLocale">
+    <el-container>
+      <el-header height="56px">
+        <app-header></app-header>
+        <app-nav-menu></app-nav-menu>
+      </el-header>
+      <el-main >
+        <div id="main-container" v-cloak>
+          <router-view/>
+        </div>
+      </el-main>
+    </el-container>
+  </el-config-provider>
 </template>
 
 <script>
@@ -17,11 +19,19 @@ import installService from './api/install'
 import appHeader from './components/common/header.vue'
 import appNavMenu from './components/common/navMenu.vue'
 import appFooter from './components/common/footer.vue'
+import zhCn from 'element-plus/es/locale/lang/zh-cn'
+import en from 'element-plus/es/locale/lang/en'
 
 export default {
   name: 'App',
   data () {
     return {}
+  },
+  computed: {
+    // Element Plus 内置文案 (分页/日期选择器等) 随当前语言切换
+    elLocale () {
+      return this.$i18n.locale === 'en' ? en : zhCn
+    }
   },
   created () {
     installService.status((data) => {

@@ -3,16 +3,16 @@
     <system-sidebar></system-sidebar>
     <el-main>
       <el-breadcrumb separator-class="el-icon-arrow-right" style="margin-bottom:20px">
-        <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-        <el-breadcrumb-item :to="{ path: '/system' }">系统管理</el-breadcrumb-item>
-        <el-breadcrumb-item>通知配置</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '/' }">{{ $t('system.slack.home') }}</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '/system' }">{{ $t('system.slack.systemManage') }}</el-breadcrumb-item>
+        <el-breadcrumb-item>{{ $t('system.slack.notificationConfig') }}</el-breadcrumb-item>
       </el-breadcrumb>
       <notification-tab></notification-tab>
       <el-form ref="form" :model="form" :rules="formRules" label-width="180px" style="width: 700px;">
-        <el-form-item label="Slack Webhook URL" prop="url">
+        <el-form-item :label="$t('system.slack.webhookUrl')" prop="url">
           <el-input v-model="form.url"></el-input>
         </el-form-item>
-        <el-form-item label="模板" prop="template">
+        <el-form-item :label="$t('system.slack.template')" prop="template">
           <el-input
             type="textarea"
             :rows="8"
@@ -22,9 +22,9 @@
           </el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="submit">保存</el-button>
+          <el-button type="primary" @click="submit">{{ $t('system.slack.save') }}</el-button>
         </el-form-item>
-        <h3>Channel &nbsp;&nbsp;&nbsp;<el-button type="primary" size="mini" plain @click="createChannel"><el-icon><Plus/></el-icon></el-button></h3>
+        <h3>{{ $t('system.slack.channel') }} &nbsp;&nbsp;&nbsp;<el-button type="primary" size="mini" plain @click="createChannel"><el-icon><Plus/></el-icon></el-button></h3>
         <el-tag
           v-for="item in channels"
           :key="item.id"
@@ -39,11 +39,11 @@
         v-model="dialogVisible"
         width="30%">
         <el-form :model="form">
-          <el-form-item label="Channel名称" >
+          <el-form-item :label="$t('system.slack.channelName')" >
             <el-input v-model.trim="channel" v-focus></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="saveChannel">确 定</el-button>
+            <el-button type="primary" @click="saveChannel">{{ $t('system.slack.confirm') }}</el-button>
           </el-form-item>
         </el-form>
       </el-dialog>
@@ -64,16 +64,20 @@ export default {
         url: '',
         template: ''
       },
-      formRules: {
-        url: [
-          {type: 'url', required: true, message: '请输入有效的通知URL', trigger: 'blur'}
-        ],
-        template: [
-          {required: true, message: '请输入通知模板', trigger: 'blur'}
-        ]
-      },
       channels: [],
       channel: ''
+    }
+  },
+  computed: {
+    formRules () {
+      return {
+        url: [
+          {type: 'url', required: true, message: this.$t('system.slack.urlRequired'), trigger: 'blur'}
+        ],
+        template: [
+          {required: true, message: this.$t('system.slack.templateRequired'), trigger: 'blur'}
+        ]
+      }
     }
   },
   components: {notificationTab, systemSidebar},
@@ -94,13 +98,13 @@ export default {
     },
     save () {
       notificationService.updateSlack(this.form, () => {
-        this.$message.success('更新成功')
+        this.$message.success(this.$t('system.slack.updateSuccess'))
         this.init()
       })
     },
     saveChannel () {
       if (this.channel === '') {
-        this.$message.error('请输入Channel名称')
+        this.$message.error(this.$t('system.slack.channelRequired'))
         return
       }
       notificationService.createSlackChannel(this.channel, () => {

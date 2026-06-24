@@ -9,7 +9,7 @@ RUN go env -w GO111MODULE=on && \
 WORKDIR /app
 
 # 前端构建产物通过 //go:embed 嵌入 gocron 二进制 (见 web/embed.go), 无需再执行 statik。
-RUN git clone https://github.com/ouqiang/gocron.git \
+RUN git clone https://github.com/dalexhu/gocron.git \
     && cd gocron \
     && make install-vue \
     && make build-vue \

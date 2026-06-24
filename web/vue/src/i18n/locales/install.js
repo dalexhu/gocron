@@ -1,0 +1,62 @@
+export default {
+  'zh-CN': {
+    install: {
+      dbConfigTitle: '数据库配置',
+      dbTypeLabel: '数据库选择',
+      dbHostLabel: '主机名',
+      dbPortLabel: '端口',
+      dbUsernameLabel: '用户名',
+      dbPasswordLabel: '密码',
+      dbNameLabel: '数据库名称',
+      dbNamePlaceholder: '如果数据库不存在, 需提前创建',
+      dbTablePrefixLabel: '表前缀',
+      adminConfigTitle: '管理员账号配置',
+      adminUsernameLabel: '账号',
+      adminEmailLabel: '邮箱',
+      adminPasswordLabel: '密码',
+      confirmAdminPasswordLabel: '确认密码',
+      installBtn: '安装',
+      dbTypeRequired: '请选择数据库',
+      dbHostRequired: '请输入数据库主机名',
+      dbPortRequired: '请输入数据库端口',
+      dbUsernameRequired: '请输入数据库用户名',
+      dbPasswordRequired: '请输入数据库密码',
+      dbNameRequired: '请输入数据库名称',
+      adminUsernameRequired: '请输入管理员账号',
+      adminEmailRequired: '请输入管理员邮箱',
+      adminPasswordRequired: '请输入管理员密码',
+      passwordMinLength: '长度至少6个字符',
+      confirmAdminPasswordRequired: '请再次输入管理员密码'
+    }
+  },
+  en: {
+    install: {
+      dbConfigTitle: 'Database Configuration',
+      dbTypeLabel: 'Database Type',
+      dbHostLabel: 'Host',
+      dbPortLabel: 'Port',
+      dbUsernameLabel: 'Username',
+      dbPasswordLabel: 'Password',
+      dbNameLabel: 'Database Name',
+      dbNamePlaceholder: 'Create it in advance if the database does not exist',
+      dbTablePrefixLabel: 'Table Prefix',
+      adminConfigTitle: 'Administrator Account Configuration',
+      adminUsernameLabel: 'Username',
+      adminEmailLabel: 'Email',
+      adminPasswordLabel: 'Password',
+      confirmAdminPasswordLabel: 'Confirm Password',
+      installBtn: 'Install',
+      dbTypeRequired: 'Please select a database',
+      dbHostRequired: 'Please enter the database host',
+      dbPortRequired: 'Please enter the database port',
+      dbUsernameRequired: 'Please enter the database username',
+      dbPasswordRequired: 'Please enter the database password',
+      dbNameRequired: 'Please enter the database name',
+      adminUsernameRequired: 'Please enter the administrator username',
+      adminEmailRequired: 'Please enter the administrator email',
+      adminPasswordRequired: 'Please enter the administrator password',
+      passwordMinLength: 'Length must be at least 6 characters',
+      confirmAdminPasswordRequired: 'Please enter the administrator password again'
+    }
+  }
+}

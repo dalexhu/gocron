@@ -2,9 +2,10 @@ import axios from 'axios'
 import { ElMessage } from 'element-plus'
 import router from '../router/index'
 import store from '../store/index'
+import i18n from '../i18n/index'
 import Qs from 'qs'
 
-const errorMessage = '加载失败, 请稍后再试'
+const t = i18n.global.t
 // 成功状态码
 const SUCCESS_CODE = 0
 // 认证失败
@@ -20,7 +21,7 @@ axios.interceptors.request.use(config => {
   return config
 }, error => {
   ElMessage.error({
-    message: errorMessage
+    message: t('common.loadFailed')
   })
 
   return Promise.reject(error)
@@ -30,7 +31,7 @@ axios.interceptors.response.use(data => {
   return data
 }, error => {
   ElMessage.error({
-    message: errorMessage
+    message: t('common.loadFailed')
   })
 
   return Promise.reject(error)
@@ -74,7 +75,7 @@ function successCallback (res, next) {
 
 function failureCallback (error) {
   ElMessage.error({
-    message: '请求失败 - ' + error
+    message: t('common.requestFailed') + error
   })
 }
 

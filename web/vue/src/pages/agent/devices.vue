@@ -1,21 +1,21 @@
 <template>
   <el-main>
     <el-table :data="devices">
-      <el-table-column prop="device_name" label="设备名"></el-table-column>
-      <el-table-column prop="client_type" label="客户端"></el-table-column>
-      <el-table-column prop="client_version" label="版本"></el-table-column>
-      <el-table-column prop="last_used_ip" label="最近 IP"></el-table-column>
-      <el-table-column prop="last_used_at" label="最近使用"></el-table-column>
-      <el-table-column prop="expires_at" label="过期时间"></el-table-column>
-      <el-table-column label="状态">
+      <el-table-column prop="device_name" :label="$t('agent.devices.deviceNameLabel')"></el-table-column>
+      <el-table-column prop="client_type" :label="$t('agent.devices.clientTypeLabel')"></el-table-column>
+      <el-table-column prop="client_version" :label="$t('agent.devices.clientVersionLabel')"></el-table-column>
+      <el-table-column prop="last_used_ip" :label="$t('agent.devices.lastUsedIpLabel')"></el-table-column>
+      <el-table-column prop="last_used_at" :label="$t('agent.devices.lastUsedAtLabel')"></el-table-column>
+      <el-table-column prop="expires_at" :label="$t('agent.devices.expiresAtLabel')"></el-table-column>
+      <el-table-column :label="$t('agent.devices.statusLabel')">
         <template #default="scope">
-          <el-tag v-if="scope.row.revoked_at && scope.row.revoked_at !== '0001-01-01T00:00:00Z'" type="info">已撤销</el-tag>
-          <el-tag v-else type="success">有效</el-tag>
+          <el-tag v-if="scope.row.revoked_at && scope.row.revoked_at !== '0001-01-01T00:00:00Z'" type="info">{{ $t('agent.devices.statusRevoked') }}</el-tag>
+          <el-tag v-else type="success">{{ $t('agent.devices.statusValid') }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="120">
+      <el-table-column :label="$t('agent.devices.operationLabel')" width="120">
         <template #default="scope">
-          <el-button size="mini" type="danger" @click="revoke(scope.row.device_id)">撤销</el-button>
+          <el-button size="mini" type="danger" @click="revoke(scope.row.device_id)">{{ $t('agent.devices.revokeBtn') }}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -41,11 +41,11 @@ export default {
       })
     },
     revoke (deviceId) {
-      this.$confirm('确认撤销该 CLI 设备授权？', '提示', {
+      this.$confirm(this.$t('agent.devices.confirmRevoke'), this.$t('agent.devices.confirmTitle'), {
         type: 'warning'
       }).then(() => {
         agentService.revokeDevice(deviceId, () => {
-          this.$message.success('已撤销')
+          this.$message.success(this.$t('agent.devices.revokeSuccess'))
           this.load()
         })
       }).catch(() => {})

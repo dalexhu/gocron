@@ -9,11 +9,11 @@
       router>
       <el-menu-item index="/task">
         <el-icon><Clock/></el-icon>
-        <span>定时任务</span>
+        <span>{{ $t('sidebar.taskCron') }}</span>
       </el-menu-item>
       <el-menu-item index="/task/log">
         <el-icon><Tickets/></el-icon>
-        <span>任务日志</span>
+        <span>{{ $t('sidebar.taskLog') }}</span>
       </el-menu-item>
     </el-menu>
   </el-aside>

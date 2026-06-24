@@ -9,7 +9,7 @@
       router>
       <el-menu-item index="/user">
         <el-icon><Notebook/></el-icon>
-        <span>用户列表</span>
+        <span>{{ $t('sidebar.userList') }}</span>
       </el-menu-item>
     </el-menu>
   </el-aside>
