@@ -17,7 +17,8 @@
 ### v2.0
 
 * 前端由 **Vue 2 + Element-UI + webpack** 升级到 **Vue 3 + Vite + Element Plus**
-* 静态资源由 `rakyll/statik` 改为 Go 原生 `//go:embed` 嵌入二进制(要求 Go 1.21+)
+* 静态资源由 `rakyll/statik` 改为 Go 原生 `//go:embed` 嵌入二进制(要求 Go 1.24+)
+* 升级部分依赖:MySQL 驱动 1.4→1.10(支持 caching_sha2_password / MySQL 8.x)、logrus、lib/pq、urfave/cli、ini 等;`dgrijalva/jwt-go`(已废弃, CVE-2020-26160)迁移到 `golang-jwt/jwt/v5`
 * 新增**中英文界面切换**(基于 vue-i18n),语言选择本地持久化,切换即时生效无需刷新
 
 ### v1.6.4
